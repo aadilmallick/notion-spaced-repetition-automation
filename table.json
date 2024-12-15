@@ -1,0 +1,52 @@
+{
+  "Next review date": {
+    "id": "PT%3Dg",
+    "name": "Next review date",
+    "type": "formula",
+    "formula": {
+      "expression": "{{notion:block_property:cw_%5D:00000000-0000-0000-0000-000000000000:0a255189-c63d-47cf-b0d5-bb688e587bdc}}.dateAdd(min((pow(2, {{notion:block_property:sbpx:00000000-0000-0000-0000-000000000000:0a255189-c63d-47cf-b0d5-bb688e587bdc}} - 1) * (1 + ({{notion:block_property:%5DKpy:00000000-0000-0000-0000-000000000000:0a255189-c63d-47cf-b0d5-bb688e587bdc}} / 5))), 30), \"days\")\n"
+    }
+  },
+  "Review": {
+    "id": "%5B%5BWp",
+    "name": "Review",
+    "type": "button",
+    "button": {}
+  },
+  "rating": {
+    "id": "%5DKpy",
+    "name": "rating",
+    "type": "number",
+    "number": {
+      "format": "number"
+    }
+  },
+  "last reviewed": {
+    "id": "cw_%5D",
+    "name": "last reviewed",
+    "type": "date",
+    "date": {}
+  },
+  "Status": {
+    "id": "dQ%5B%3B",
+    "name": "Status",
+    "type": "formula",
+    "formula": {
+      "expression": "if({{notion:block_property:PT%3Dg:00000000-0000-0000-0000-000000000000:0a255189-c63d-47cf-b0d5-bb688e587bdc}} < now(), \"Needs Review ⚠️\", \"On Schedule ✅\")"
+    }
+  },
+  "reps": {
+    "id": "sbpx",
+    "name": "reps",
+    "type": "number",
+    "number": {
+      "format": "number"
+    }
+  },
+  "Name": {
+    "id": "title",
+    "name": "Name",
+    "type": "title",
+    "title": {}
+  }
+}

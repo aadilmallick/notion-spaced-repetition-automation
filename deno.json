@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "start": "deno run -A main.ts"
+  },
+  "imports": {
+    "@notionhq/client": "npm:@notionhq/client@^2.2.15",
+    "@std/assert": "jsr:@std/assert@1",
+    "@types/nodemailer": "npm:@types/nodemailer@^6.4.17",
+    "dotenv": "npm:dotenv@^16.4.7",
+    "nodemailer": "npm:nodemailer@^6.9.16",
+    "twilio": "npm:twilio@^5.3.7"
+  }
+}
