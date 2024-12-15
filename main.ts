@@ -1,8 +1,7 @@
 import dotenv from "npm:dotenv";
 import { Client } from "npm:@notionhq/client";
-// ! this is how you fucking do it
-// @ts-types="npm:@types/nodemailer"
-import nodemailer from "npm:nodemailer";
+import { Mailer } from "./Mailer.ts";
+
 dotenv.config();
 
 class Constants {
@@ -26,33 +25,6 @@ class Constants {
   }
   static DATABASE_ID = "8d8c263637f04cd1b032dfad77569957";
 }
-
-const sendEmail = async (subject: string, message: string) => {
-  // Create a transporter
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: Constants.USER_GMAIL, // Replace with your Gmail address
-      pass: Constants.USER_GMAIL_APP_PASSWORD, // Replace with your Gmail password or App Password
-    },
-  });
-
-  // Email options
-  const mailOptions = {
-    from: Constants.USER_GMAIL, // Sender address
-    to: Constants.USER_GMAIL, // Receiver address (your Gmail)
-    subject: subject, // Subject line
-    text: message, // Plain text body
-  };
-
-  try {
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent: " + info.response);
-  } catch (error) {
-    console.error("Error sending email:", error);
-  }
-};
 
 const notion = new Client({ auth: Constants.API_KEY });
 
@@ -79,8 +51,25 @@ async function getTasks() {
 async function sendText(tasks: Awaited<ReturnType<typeof getTasks>>) {
   const taskNames = tasks.map((task) => task.name.title[0].plain_text);
   const message = "Hurry up and review these tasks: " + taskNames.join(", ");
+  const subject = "Notion Spaced Repetition Reminder";
   console.log(message);
-  await sendEmail("Notion Spaced Repetition Reminder", message);
+
+  const mailer = new Mailer(
+    Constants.USER_GMAIL,
+    Constants.USER_GMAIL_APP_PASSWORD
+  );
+
+  // 1. send gmail
+  await mailer.sendEmail(
+    Constants.USER_GMAIL,
+    "Notion Spaced Repetition Reminder",
+    message
+  );
+
+  // 2. send text
+  await mailer.sendSMS(Constants.phoneNumber, subject, message);
+
+  // 3. send push
   await fetch("https://api.pushover.net/1/messages.json", {
     method: "post",
     headers: { "Content-type": "application/x-www-form-urlencoded" },
