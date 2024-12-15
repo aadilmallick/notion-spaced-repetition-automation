@@ -2,6 +2,14 @@
 // @ts-types="npm:@types/nodemailer"
 import nodemailer from "npm:nodemailer";
 
+type Carrier =
+  | "tmobile"
+  | "verizon"
+  | "at&t"
+  | "cricket"
+  | "boost"
+  | "googlefi"
+  | "metro";
 export class Mailer {
   private transporter: ReturnType<typeof nodemailer.createTransport>;
   constructor(
@@ -37,18 +45,39 @@ export class Mailer {
     }
   }
 
+  private getCarrierGateway(carrier: Carrier) {
+    const carrierToGateway: Record<Carrier, string> = {
+      tmobile: "tmomail.net",
+      verizon: "vtext.com",
+      "at&t": "txt.att.net",
+      cricket: "sms.cricketwireless.net",
+      boost: "myboostmobile.com",
+      googlefi: "msg.fi.google.com",
+      metro: "mymetropcs.com",
+    };
+    return carrierToGateway[carrier];
+  }
+
   /**
    *
    * @param phoneNumber The US 10 digit phone number
    * @param message
    */
-  async sendSMS(phoneNumber: string, subject: string, message: string) {
+  async sendSMS(
+    phoneNumber: string,
+    subject: string,
+    message: string,
+    options?: {
+      carrier?: Carrier;
+    }
+  ) {
     if (!phoneNumber.match(/^\d{10}$/)) {
       throw new Error("Invalid phone number, must be 10 digits");
     }
 
     // SMS gateway address
-    const tMobileGateway = `${phoneNumber}@tmomail.net`; // Replace with your T-Mobile number
+    const carrier: Carrier = options?.carrier ?? "tmobile";
+    const tMobileGateway = `${phoneNumber}@${this.getCarrierGateway(carrier)}`;
 
     // Email message details
     const mailOptions = {
