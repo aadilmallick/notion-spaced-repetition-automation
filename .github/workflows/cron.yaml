@@ -1,6 +1,7 @@
 on:
   schedule:
     - cron: "0 18 * * *"
+  workflow_dispatch:
 
 env:
   API_KEY: ${{ secrets.API_KEY }}
