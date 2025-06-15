@@ -1,0 +1,22 @@
+on:
+  schedule:
+    - cron: "0 18 * * *"
+
+env:
+  API_KEY: ${{ secrets.API_KEY }}
+  PHONE_NUMBER: ${{ secrets.PHONE_NUMBER }}
+  PUSHOVER_APPLICATION_KEY: ${{ secrets.PUSHOVER_APPLICATION_KEY }}
+  PUSHOVER_USER_KEY: ${{ secrets.PUSHOVER_USER_KEY }}
+  PUSHOVER_EMAIL: ${{ secrets.PUSHOVER_EMAIL }}
+  USER_GMAIL: ${{ secrets.USER_GMAIL }}
+  USER_GMAIL_APP_NAME: ${{ secrets.USER_GMAIL_APP_NAME }}
+  USER_GMAIL_APP_PASSWORD: ${{ secrets.USER_GMAIL_APP_PASSWORD }}
+jobs:
+  send-text:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno run start
