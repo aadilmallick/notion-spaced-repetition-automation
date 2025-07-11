@@ -44,7 +44,7 @@ async function sendText(tasks: Awaited<ReturnType<typeof getTasks>>) {
 
   // 2. send text
   await mailer.sendSMS(Constants.phoneNumber, subject, message, {
-    carrier: "tmobile",
+    carrier: "at&t",
   });
 
   // 3. send push
